@@ -156,8 +156,7 @@ const ShirtModel = forwardRef(({ selectedVariant, uploadedLogos, logoSize, color
                 materials[key].sheen = 1; // Fabric-like highlights
                 materials[key].clearcoat = 1; // Light clearcoat for depth
                 materials[key].clearcoatRoughness = 0.9; // Keep clearcoat realistic
-                materials[key].color.set(new THREE.Color(colors[colorIndex % colors.length]).convertSRGBToLinear());
-// materials[key].color.set(colors[colorIndex % colors.length]);
+                materials[key].color.set(colors[colorIndex % colors.length]);
                 materials[key].opacity = 1;
                 colorIndex++;
             } else {
