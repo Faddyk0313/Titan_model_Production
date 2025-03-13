@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 const JerseyConfigurator = () => {
   const [searchParams] = useSearchParams();
   const initialVariant = searchParams.get("design") || "BATTLE"; // Default to 'BATTLE' if not found
-  console.log("initialVariant", initialVariant);
+  // console.log("initialVariant", initialVariant);
   const [selectedVariant, setSelectedVariant] = useState<string>(initialVariant);
   const [minQuantity, setMinQuantity] = useState<number>(12);
   const [value, setValue] = useState<number>(minQuantity);

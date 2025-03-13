@@ -16,13 +16,21 @@ interface ShirtModelProps {
 }
 
 const ShirtModel = forwardRef(({ selectedVariant, uploadedLogos, logoSize, colors, setSelectedColors, cameraPos }: ShirtModelProps, ref) => {
+    // const [modelPath, setModelPath] = useState("/All in one.glb");
 
+    // useEffect(() => {
+    //   // Check screen width and update model path
+    //   if (window.innerWidth >= 600) {
+    //     setModelPath("/ALL_8_DESIGN_COMPRESSED.glb");
+    //   }
+    // }, []);
     const { camera } = useThree();
-    const { nodes, materials } = useGLTF(`/Latest.glb`) as unknown as {
+    const { nodes, materials } = useGLTF("/All in one.glb") as unknown as {
         scene: THREE.Scene;
         nodes: Record<string, THREE.Mesh>;
         materials: Record<string, THREE.MeshPhysicalMaterial>;
     };
+
 
     const modelRef = useRef<THREE.Group>(null);
 
@@ -144,27 +152,29 @@ const ShirtModel = forwardRef(({ selectedVariant, uploadedLogos, logoSize, color
     }, [selectedVariant]);
 
     // Update material opacity dynamically
-    useMemo(() => {
-        if (!materials || !colors.length) return;
-
+    useEffect(() => {
+        // if (!materials || !colors.length) return;
+        
         let colorIndex = 0;
         Object.keys(materials).forEach((key) => {
             if (key.includes(formattedVariant)) {
-                console.log("Key", key);
+                // console.log("Key", key);
                 materials[key].roughness = 1; // Higher roughness for fabric
                 materials[key].metalness = 0; // Non-metallic
                 materials[key].sheen = 1; // Fabric-like highlights
                 materials[key].clearcoat = 1; // Light clearcoat for depth
                 materials[key].clearcoatRoughness = 0.9; // Keep clearcoat realistic
                 materials[key].color.set(colors[colorIndex % colors.length]);
+                // materials[key].emissive.set(colors[colorIndex % colors.length]);
                 materials[key].opacity = 1;
                 colorIndex++;
+                console.log("Hello", materials[key])
             } else {
                 materials[key].transparent = true;
                 materials[key].opacity = 0;
             }
         });
-    }, [formattedVariant, colors]);
+    }, [selectedVariant, formattedVariant, colors]);
 
     const meshes = [
         { key: "SC_Assault_SR_LS_SPC_Color_1001", material: "SC_Assault_SR_LS_SPC_Color 1", hasDecal: true },
@@ -232,6 +242,8 @@ const ShirtModel = forwardRef(({ selectedVariant, uploadedLogos, logoSize, color
         { key: "SC_Power_SR_LS_SPC_Color_8001", material: "SC_Power_SR_LS_SPC_Color 8" },
 
     ];
+
+    // console.log("modelPath", modelPath)
 
     return (
         <a.group ref={modelRef} rotation-y={spring.rotY} scale={spring.scale} dispose={null}>
